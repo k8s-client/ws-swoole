@@ -37,7 +37,7 @@ class ClientFactoryTest extends TestCase
         $uri->shouldReceive([
             'getHost' => 'foo.bar',
             'getPort' => 8443,
-            'getScheme' => 'wss',
+            'getScheme' => 'ws',
         ]);
 
         $request = \Mockery::spy(RequestInterface::class);
