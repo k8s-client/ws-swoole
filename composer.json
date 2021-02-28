@@ -1,0 +1,50 @@
+{
+  "name": "k8s/ws-swoole",
+  "description": "Swoole based websocket adapter for k8s/client",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Chad Sikorra",
+      "email": "Chad.Sikorra@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.2",
+    "ext-swoole": "*",
+    "k8s/core": "^1.2"
+  },
+  "require-dev": {
+    "ext-mbstring": "*",
+    "friendsofphp/php-cs-fixer": "^2.0",
+    "mockery/mockery": "~1.3.0",
+    "phpstan/phpstan": "^0.12.79",
+    "phpunit/phpunit": "^8.0",
+    "swoole/ide-helper": "^4.6"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "K8s\\WsSwoole\\": "src/K8s/WsSwoole"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "unit\\K8s\\WsSwoole\\": "tests/unit/K8s/WsSwoole"
+    }
+  },
+  "scripts": {
+    "cs-fix": [
+      "@putenv PHP_CS_FIXER_IGNORE_ENV=1",
+      "php-cs-fixer fix src/ --rules=@PSR2"
+    ],
+    "analyse": [
+      "phpstan analyse"
+    ],
+    "test": [
+      "phpunit"
+    ]
+  }
+}
