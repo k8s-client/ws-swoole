@@ -20,16 +20,21 @@ class ClientFactory
 {
     public function makeCoroutineClient(RequestInterface $request, array $options = []): Client
     {
+        $ssl = $request->getUri()->getScheme() === 'wss';
+
         $client = new Client(
             $request->getUri()->getHost(),
-            $request->getUri()->getPort(),
-            $request->getUri()->getScheme() === 'wss'
+            $request->getUri()->getPort() ?? ($ssl ? 443 : 80),
+            $ssl
         );
 
         if (!empty($options)) {
             $client->set($options);
         }
-        $client->setHeaders($request->getHeaders());
+
+        $client->setHeaders(array_map(function ($value) {
+            return $value[0];
+        }, $request->getHeaders()));
 
         return $client;
     }
