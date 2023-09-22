@@ -33,7 +33,7 @@ class ClientFactory
         }
 
         $client->setHeaders(array_map(function ($value) {
-            return $value[0];
+            return implode(',', $value);
         }, $request->getHeaders()));
 
         return $client;
