@@ -45,15 +45,23 @@ class CoroutineAdapter implements WebsocketClientInterface
         # Swoole does not bubble up exceptions for some reason. So we need to get it ourselves.
         $exception = null;
 
-        Coroutine\run(function () use ($payloadHandler, $request, &$exception) {
-            go(function () use ($payloadHandler, $request, &$exception) {
-                try {
-                    $this->sendAndReceive($request, $payloadHandler);
-                } catch (Throwable $e) {
-                    $exception = $e;
-                }
+        $connector = function () use ($payloadHandler, $request, &$exception) {
+            try {
+                $this->sendAndReceive($request, $payloadHandler);
+            } catch (Throwable $e) {
+                $exception = $e;
+            }
+        };
+
+        $cid = Coroutine::getCid();
+
+        if ($cid > -1) {
+            $connector();
+        } else {
+            Coroutine\run(function () use ($connector) {
+                go($connector);
             });
-        });
+        }
 
         /** @var Throwable|null $exception */
         if ($exception) {
